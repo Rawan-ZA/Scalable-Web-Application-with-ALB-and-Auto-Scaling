@@ -4,12 +4,11 @@
 - [Solution Overview](#solution-overview)
 - [Architecture Diagram](#architecture-diagram)
 - [AWS Services Used](#aws-services-used)
-- [Deployment Guide](#deployment-guide)
+- [Traffic Flow](#traffic-flow)
 - [Security Highlights](#security-highlights)
-- [Learning Outcomes](#learning-outcomes)
-- [License](#license)
 
-## 📌 Project Description  "Solution Overview"
+
+## 📌 Solution Overview
 
 This is the **final project** completed at the end of an **AWS Solutions 
 Architect** training course. It demonstrates the practical application of core 
@@ -99,3 +98,30 @@ Availability Zones** for high availability. Each Availability Zone contains:
 | **Amazon CloudWatch** | Metrics, dashboards, and alarms for infrastructure health |
 | **Amazon SNS** | Sends notifications when CloudWatch alarms are triggered |
 | **Security Groups & NACLs** | Instance-level (stateful) and subnet-level (stateless) network access control |
+
+## 🔐 Security Highlights
+
+- **Private Compute & Database Layers** — All EC2 instances and the RDS database 
+  are deployed in private subnets, with no direct internet exposure.
+
+- **Defense in Depth (Security Groups + NACLs)** — Security Groups provide 
+  stateful, instance-level access control, while NACLs add a stateless, 
+  subnet-level layer as a secondary safeguard.
+
+- **Web Application Firewall (WAF)** — Associated with the ALB to filter out 
+  common web exploits (SQL Injection, XSS, and other OWASP Top 10 threats) 
+  before traffic reaches the application.
+
+- **No SSH, No Bastion Host** — Administrative access to EC2 instances is done 
+  exclusively through **AWS Systems Manager Session Manager**, controlled by 
+  IAM permissions, with zero open inbound ports.
+
+- **Database Isolation** — RDS is only reachable from the application tier via 
+  Security Group rules; it has no public endpoint.
+
+- **Multi-AZ Database Failover** — RDS Multi-AZ ensures the database remains 
+  available even if the primary instance or its entire Availability Zone fails.
+
+- **Encrypted Data** — RDS storage and backups are 
+  encrypted at rest, and traffic between the client and ALB is encrypted in 
+  transit via HTTPS/TLS.
