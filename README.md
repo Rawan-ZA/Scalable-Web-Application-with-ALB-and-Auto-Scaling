@@ -57,27 +57,6 @@ Availability Zones** for high availability. Each Availability Zone contains:
 | **Outbound Internet (patches/updates)** | EC2 (Private Subnet) → NAT Gateway → Internet Gateway |
 | **Monitoring & Alerting** | EC2 / ALB / RDS → CloudWatch → SNS → Email/SMS Notification |)
 
-### Architecture Summary
-
-The infrastructure is deployed across a single AWS Region, spanning **two 
-Availability Zones** for high availability. Each Availability Zone contains:
-
-- A **Public Subnet** hosting a NAT Gateway (for outbound internet access from 
-  private resources)
-- A **Private Subnet** hosting the application EC2 instance (behind the ALB and 
-  managed by the Auto Scaling Group)
-- A **Private Subnet** hosting the RDS database instance (Primary in AZ-1, 
-  Standby in AZ-2, synchronously replicated)
-
-### Traffic Flow
-
-| Flow | Path |
-|---|---|
-| **User Request** | User → Route 53 → CloudFront → WAF (associated with ALB) → ALB → Auto Scaling Group → EC2 (Private Subnet) |
-| **Database Replication** | RDS Primary (AZ-1) → Sync → RDS Standby (AZ-2) |
-| **Admin Access** | Administrator → AWS Systems Manager Session Manager → EC2 (no SSH, no bastion host) |
-| **Outbound Internet (patches/updates)** | EC2 (Private Subnet) → NAT Gateway → Internet Gateway |
-| **Monitoring & Alerting** | EC2 / ALB / RDS → CloudWatch → SNS → Email/SMS Notification |
 
 ## ☁️ AWS Services Used
 
