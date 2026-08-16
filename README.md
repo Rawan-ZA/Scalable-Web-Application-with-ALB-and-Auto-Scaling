@@ -33,7 +33,7 @@ architectures.
 
 ## 🏗️ Solution Architecture Diagram
 
-![Architecture Diagram](./architecture-diagram.png)
+![Architecture Diagram](./archiceture-diagram.png)
 
 ### Architecture Summary
 
