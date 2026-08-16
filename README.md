@@ -1,6 +1,15 @@
 # Scalable-Web-Application-with-ALB-and-Auto-Scaling
 
-## 📌 Project Description
+## Table of Content
+- [Solution Overview](#solution-overview)
+- [Architecture Diagram](#architecture-diagram)
+- [AWS Services Used](#aws-services-used)
+- [Deployment Guide](#deployment-guide)
+- [Security Highlights](#security-highlights)
+- [Learning Outcomes](#learning-outcomes)
+- [License](#license)
+
+## 📌 Project Description  "Solution Overview"
 
 This is the **final project** completed at the end of an **AWS Solutions 
 Architect** training course. It demonstrates the practical application of core 
