@@ -75,76 +75,18 @@ Availability Zones** for high availability. Each Availability Zone contains:
 
 ## ☁️ AWS Services Used
 
-### 1. Amazon VPC (Virtual Private Cloud)
-A private, isolated network within AWS, designed with **Public and Private 
-Subnets distributed across 2 Availability Zones**. Public Subnets host resources 
-that need direct internet connectivity (such as the NAT Gateway), while Private 
-Subnets host sensitive resources (EC2, RDS) completely isolated from direct 
-internet access.
-
-### 2. Internet Gateway
-The gateway that allows resources in the Public Subnet to communicate with the 
-internet in both directions (inbound and outbound).
-
-### 3. NAT Gateway
-Allows resources in the **Private Subnets** (such as EC2 instances) to make 
-outbound requests to the internet (updates, downloading packages, etc.) without 
-having a public IP or being exposed to inbound connections from outside. A 
-separate NAT Gateway is deployed in each AZ to ensure High Availability.
-
-### 4. Amazon EC2 + Auto Scaling Group (ASG)
-The servers that actually run the application, located in the Private Subnets. 
-The **Auto Scaling Group** monitors load (CPU utilization) and automatically 
-increases or decreases the number of instances using a **target tracking 
-scaling policy**, ensuring consistent performance regardless of user traffic 
-fluctuations.
-
-### 5. Application Load Balancer (ALB)
-Distributes incoming traffic across EC2 instances in both AZs based on health 
-checks, operating at **Layer 7** (HTTP/HTTPS), which allows for advanced 
-routing rules if needed in the future.
-
-### 6. AWS WAF (Web Application Firewall)
-Associated directly with the ALB, filtering malicious requests before they 
-reach the application, using **Managed Rule Groups** that cover the 
-**OWASP Top 10** (such as SQL Injection and XSS).
-
-### 7. Amazon CloudFront
-A Content Delivery Network (CDN) that caches static assets at edge locations 
-geographically closer to users, reducing latency and lowering the load on the 
-backend.
-
-### 8. Amazon RDS (Multi-AZ)
-The managed database (MySQL/PostgreSQL), deployed in **Multi-AZ mode**: a 
-Primary instance handles reads/writes, while a Standby instance in the second 
-AZ stays continuously synchronized via **synchronous replication**. If the 
-Primary fails, AWS performs an **automatic failover** to the Standby with no 
-manual intervention required.
-
-### 9. Amazon Route 53
-The DNS service, routing user requests to the ALB endpoint via an **Alias 
-Record**, combined with **Health Checks** to ensure traffic only reaches 
-healthy resources.
-
-### 10. AWS Systems Manager – Session Manager
-A secure alternative to the traditional SSH + Bastion Host approach for 
-accessing EC2 instances. No ports are exposed to the internet, and access is 
-controlled entirely through IAM permissions, significantly reducing the 
-attack surface.
-
-### 11. Amazon CloudWatch
-Collects metrics and logs from all resources (EC2, ALB, RDS), enabling 
-**Dashboards** and **Alarms** that trigger when a specific metric (such as 
-CPU utilization or error rate) crosses a defined threshold.
-
-### 12. Amazon SNS (Simple Notification Service)
-Connected to CloudWatch Alarms, sending real-time notifications (Email/SMS) 
-to the operations team whenever an issue occurs, enabling a fast response.
-
-### 13. Security Groups & NACLs
-Two complementary layers of network-level protection:
-- **Security Groups**: operate at the instance level and are **Stateful** 
-  (automatically allow return traffic for any permitted request)
-- **NACLs**: operate at the subnet level and are **Stateless** (inbound and 
-  outbound rules must be defined separately), providing an additional layer 
-  of protection in case a Security Group is misconfigured
+| Service | Purpose |
+|---|---|
+| **Amazon VPC** | Isolated network with public/private subnets across 2 AZs |
+| **Internet Gateway** | Enables internet access for public subnet resources |
+| **NAT Gateway** | Allows private-subnet resources (EC2) to reach the internet without being exposed to inbound traffic |
+| **EC2 + Auto Scaling Group** | Runs the application; automatically scales based on CPU utilization (target tracking) |
+| **Application Load Balancer (ALB)** | Distributes Layer 7 traffic across healthy EC2 instances in both AZs |
+| **AWS WAF** | Associated with the ALB; filters malicious traffic (OWASP Top 10 rules) |
+| **Amazon CloudFront** | CDN caching static assets closer to users to reduce latency |
+| **Amazon RDS (Multi-AZ)** | Managed database with a synchronously replicated standby for automatic failover |
+| **Amazon Route 53** | DNS routing to the ALB via alias record, with health checks |
+| **Systems Manager – Session Manager** | Secure, bastion-free, SSH-free access to EC2 instances via IAM |
+| **Amazon CloudWatch** | Metrics, dashboards, and alarms for infrastructure health |
+| **Amazon SNS** | Sends notifications when CloudWatch alarms are triggered |
+| **Security Groups & NACLs** | Instance-level (stateful) and subnet-level (stateless) network access control |
