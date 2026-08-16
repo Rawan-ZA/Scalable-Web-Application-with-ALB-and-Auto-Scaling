@@ -33,8 +33,6 @@ architectures.
 
 ## 🏗️ Solution Architecture Diagram
 
-![Architecture Diagram](./## 🏗️ Solution Architecture Diagram
-
 ![Architecture Diagram](./aws-scalable-web-application-architecture.png.drawio.png)
 
 ### Architecture Summary
